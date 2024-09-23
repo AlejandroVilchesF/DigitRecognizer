@@ -8,19 +8,20 @@ from tensorflow.keras import layers, models
 data = pd.read_csv('data/train.csv')
 
 # Separar las características (imágenes) de las etiquetas
-X = data.drop('label', axis=1).values  # Píxeles de la imagen
+X = data.drop('label', axis=1).values  # Píxeles de la imagen, con axis=1 se elimina una columna.
 y = data['label'].values  # Etiquetas (dígitos)
 
 # Normalizar las imágenes (escalarlas a valores entre 0 y 1)
 X = X / 255.0
 
 # Reshape de las imágenes a 28x28 píxeles, ya que están aplanadas en el CSV
-X = X.reshape(-1, 28, 28, 1)  # -1 es para que infiera el número de ejemplos, 1 es el canal (grayscale)
+X = X.reshape(-1, 28, 28, 1)  # -1 es para que infiera el número de filas solo, 1 es el canal (grayscale)
 
 # Convertir las etiquetas a one-hot encoding
 y = to_categorical(y, num_classes=10)
 
 # Dividir en conjuntos de entrenamiento y validación
+# random_state tiene como objetivo hacer que la division de los datos siempre sea igual para debuguear
 X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=0.3, random_state=42)
 
 # Cargar el dataset de prueba desde CSV
